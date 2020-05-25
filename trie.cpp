@@ -107,4 +107,108 @@ class Trie
             }
         }
     }
+
+    //funcao recursiva em cima das palavras adicionadas
+    //sendo recursiva para cada letra da palavra
+
+    //vamos serializar nossa arvore passando ela para um documento txt
+    void serializar(ofstream& arquivo)
+    {
+        //comecamos serializando da raiz e entrando em cada um 
+        //dos nós abaixo, fazemos isso de forma recursiva
+        node* var = pRoot;
+        for(int i = 0; i < 128; i++)
+        {
+            //caso exista o filho iremos guardar o indice dele no arquivo
+            //e chamaremos a mesma funcao, agora comecando no nó filho
+            if(var->Pfilho[i] != nullptr)
+            {
+                arquivo << i;
+                serializar(arquivo,var->Pfilho[i]);
+                //terminando de serializar um nó 
+                arquivo << '-';
+
+            }
+            
+        }
+    cout << "fim da serializacao" << endl;
+
+    }
+
+    void serializar(ofstream& arquivo,node* var)
+    {
+        int tam = var->Docs.size();
+        arquivo << '.';
+        //caso existam documentos guardados no nó 
+        //aguardaremos quantos possui, alem de seus 
+        //ids itereando sobre a quantidade deles
+        if(tam > 0)
+        {
+            arquivo << tam;
+            arquivo << '+';
+
+            for(int d = 0; d < tam; d++)
+            {
+                int tam_pos = var->Docs[d].size();
+                //adicionamos a id do doc e logo dps a posiçao 
+                //das palavras no documento
+                arquivo << var->Docs[d][0];
+                arquivo << ',';
+                for (int p = 1; p < tam_pos; p++)
+                {
+                    arquivo << var->Docs[d][p];
+                    arquivo << ';';
+                }
+                //avisamos que paramos de colocar as posiçoes
+                arquivo << '|' ;
+            }
+
+        }
+
+        for(int i = 0; i < 128; i++)
+        {
+            //caso exista o filho iremos guardar o indice dele no arquivo
+            //e chamaremos a mesma funcao, agora comecando no nó filho
+            if(var->Pfilho[i] != nullptr)
+            {
+                arquivo << i;
+                serializar(arquivo,var->Pfilho[i]);
+                arquivo << '-';
+
+            }
+        }
+        
+
+        
+    }
+    
+};
+
+int main() {
+
+	Trie trie;
+	int number_page = 0;
+
+	string page;
+    ifstream file ("write.txt");
+	if (file.is_open()) 
+    {
+		if (file.good()) 
+        {
+			while(getline(file, page))
+            {
+				trie.add_doc(page, number_page);
+				number_page++;
+			}
+		}
+	}
+
+	file.close();
+
+
+	ofstream serialization ("Serialization.txt");
+	trie.serializar(serialization);
+	serialization.close();
+	
+	return 0;
 }
