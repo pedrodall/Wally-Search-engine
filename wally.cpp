@@ -33,7 +33,7 @@ class Trie
     {
 		//Montamos nossa arvore com o arquivo serializado 
         //assim que a trie é criada
-		ifstream serializado ("Serialization.txt");
+		ifstream serializado ("Trie.txt");
 		deserialize(serializado);
 		serializado.close();
 	}
@@ -125,7 +125,14 @@ class Trie
 
     void search(string plvr)
     {
+        clock_t t0, t;
+	    t0 = clock();
+        string more = "";
+
         Node* pNode = pRoot;
+        vector<int> consultas;
+        string line;
+        int j = 0;
         
         for(int i = 0; i< plvr.size();i++)
         {
@@ -138,13 +145,57 @@ class Trie
                 return;
             }    
         }
+        t = clock() - t0;
+        cout << (float) t/CLOCKS_PER_SEC << endl;
+        ifstream file ("titles.txt");
 
         for(int i = 0; i < pNode->doc_size; i++)
         {
-            cout << pNode->docs[i][0]<< endl;
+            consultas.push_back(pNode->docs[i][0]);
         }
 
+        for(int i = 0; i < pNode->doc_size; i++)
+        {
+            
+            while(j < consultas[i])
+            {
+                getline(file,line);
+                j++;
+            }
+            getline(file,line);
+            cout << "["<< j << "]"<<line << endl;
+            if(i % 20 == 19)
+            {
+                cout<< "########### ver mais? ###########"<< endl;
+                cin >> more;
+                cout << "#################################" << endl;
+                if(more != "s")
+                {
+                    return;
+                }
+            }
+            
+        }
+
+        cout << "########### end ###########" << endl;
+        // for(int i = 0; i < pNode->doc_size; i++)
+        // {
+        //     cout << "{"<< i << "}" << pNode->docs[i][0]<< endl;
+        //     if(i % 2 == 1)
+        //     {
+        //         cout<< "Ver mais?"<< endl;
+        //         cin >> more;
+
+        //         if(more != "s")
+        //         {
+        //             return;
+        //         }
+        //     }
+        // }
+
     }
+
+
 		
 		
 };
@@ -152,7 +203,15 @@ class Trie
 int main(){
 	
 	Trie trie;
-    
-	
+    string run = "";
+    while (run != "0")
+    {
+        cin >> run;
+        if((run != "0"))
+        {
+        trie.search(run);
+        }
+    }
+
 	return 0;
 }
