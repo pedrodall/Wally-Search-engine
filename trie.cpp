@@ -206,9 +206,12 @@ int main() {
 	file.close();
 
 
-	ofstream serialization ("Serialization.txt");
+	ofstream serialization ("Trie.txt");
 	trie.serializar(serialization);
 	serialization.close();
 	
 	return 0;
 }
+
+
+
