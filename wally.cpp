@@ -17,7 +17,7 @@ struct Node {
 		}
 		doc_size = 0;
 	}
-	void array_size(int size) {
+	void tamanho(int size) {
 		docs = new vector<int>[size];
 		doc_size = size;
 	}
@@ -116,7 +116,7 @@ class Trie
 			else if (letter == '+') 
             {
 				i = 0;
-				pNode->array_size(stoi(number));
+				pNode->tamanho(stoi(number));
 				number = "";
 			}
 			else number = number + letter;
@@ -126,13 +126,12 @@ class Trie
     void search(string plvr)
     {
         clock_t t0, t;
-	    t0 = clock();
-        string more = "";
-
+        string more;
         Node* pNode = pRoot;
         vector<int> consultas;
         string line;
         int j = 0;
+        t0 = clock();
         
         for(int i = 0; i< plvr.size();i++)
         {
@@ -145,14 +144,16 @@ class Trie
                 return;
             }    
         }
+
         t = clock() - t0;
         cout << (float) t/CLOCKS_PER_SEC << endl;
-        ifstream file ("titles.txt");
 
         for(int i = 0; i < pNode->doc_size; i++)
         {
             consultas.push_back(pNode->docs[i][0]);
         }
+
+        ifstream file ("titles.txt");
 
         for(int i = 0; i < pNode->doc_size; i++)
         {
@@ -178,25 +179,110 @@ class Trie
         }
 
         cout << "########### end ###########" << endl;
-        // for(int i = 0; i < pNode->doc_size; i++)
-        // {
-        //     cout << "{"<< i << "}" << pNode->docs[i][0]<< endl;
-        //     if(i % 2 == 1)
-        //     {
-        //         cout<< "Ver mais?"<< endl;
-        //         cin >> more;
-
-        //         if(more != "s")
-        //         {
-        //             return;
-        //         }
-        //     }
-        // }
-
     }
 
 
-		
+
+    void search(string plvr, vector<vector<int>*> * cons, vector<int>* cons_size)
+    {
+        Node* pNode = pRoot;
+
+        for(int i = 0; i< plvr.size();i++)
+        {
+            if ((pNode->pChild)[ (int) plvr[i] ])
+            {
+                pNode = pNode->pChild[(int) plvr[i]];
+            }
+            else
+            {
+                return;
+            }    
+        }
+
+        (*cons).push_back(*&(pNode->docs));
+        (*cons_size).push_back(pNode->doc_size);
+    }
+
+    void split_search(string str)
+    {
+        vector<vector<int>*> * cons;
+        vector<int>* cons_size, *resul;
+        cons = new vector<vector<int>*>;
+        cons_size = new vector<int>;
+        int ini = 0;
+        int f = 0;
+
+        for (f = 0; f < str.length(); f++)
+        {
+            //cout << str[f]<< f << endl;
+            if (str[f] == ' ')
+            {
+                search(str.substr(ini,f-ini),cons,cons_size);
+                //cout << f;
+                ini = f+1;
+            }
+        }
+
+        search(str.substr(ini,f-ini),cons,cons_size);
+        resul = new vector<int>;
+
+        if((*cons).size() > 1)
+        {
+            
+            for (int i = 0; i < (*cons_size)[0] ; i++)
+            {
+                resul->push_back((*((*cons)[0]+i))[0]);
+                cout << (*((*cons)[0]+i))[0] << ",";
+
+            }
+            cout << endl;
+            for (int i = 0; i < (*cons_size)[1] ; i++)
+            {
+                cout << (*((*cons)[1]+i))[0] << ",";
+
+            }
+            cout << endl;
+            for (int i = 1; i < (*cons).size() ; i++)
+            {
+                intersec(resul,(*cons)[i], (*cons_size)[i] );
+            }
+
+            for (int i = 0; i < resul->size() ; i++)
+            {
+                cout << (*resul)[i] << ",";
+            }
+            
+        }
+
+    }
+
+void intersec(vector<int>* resul,vector<int>* cons, int cons_size )
+{
+     int k = resul->size() - 1;
+
+    for (int i = cons_size - 1; i > -1; i--)
+    {
+        if(k >= 0)
+        {
+            while ((*(cons+i))[0] < (*resul)[k])
+            {
+                (*resul).erase(resul->begin()+k);     
+                k--;
+                if(k < 0) break;
+            }
+            if ((*(cons+i))[0] == (*resul)[k]) k--;
+        }
+    }
+    for (int i = k; i > -1; i--)
+    {
+        (*resul).erase(resul->begin()+i);  
+    }
+    
+
+    return;  
+}
+
+	
 		
 };
 
@@ -204,12 +290,14 @@ int main(){
 	
 	Trie trie;
     string run = "";
+    
+    
     while (run != "0")
     {
-        cin >> run;
+        getline(cin, run);
         if((run != "0"))
         {
-        trie.search(run);
+        trie.split_search(run);
         }
     }
 
