@@ -51,7 +51,7 @@ int main(){
 		//	"atributo2": {"sub-atributo": "valor2"}} 
 		vector<string> pesquisas= lista(it->second);
 		vector<vector<string>> l= vinte(pesquisas);		
-		string img_button = " mas você pode usar o wikipédia de verdade! <a href= \'https://en.wikipedia.org/wiki/"+it->second+"\'> Clique aqui</a>";	
+		string img_button = "Wally não encontrou nada, mas você pode usar o wikipédia de verdade! <a href= \'https://en.wikipedia.org/wiki/"+it->second+"\'> Clique aqui</a>";	
 		//img button é só um texto q dps a gente lida no javascript pra conseguirmos interpretar
 		stringstream stream;
 		//stream << "{\"res\":\" Não conseguimos a busca para " << it->second << "..." << img_button << "\",\n"; 
