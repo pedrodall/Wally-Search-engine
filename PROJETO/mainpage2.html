@@ -1,22 +1,65 @@
 <!DOCTYPE html>
 <html>
-<head>	
+
+<head>
+	<meta charset="utf-8" />
 	<title>Wally search</title>
-	<link id = "estilo" href="cssmainpage2.css" rel="stylesheet" type="text/css"/>
+	<link id="estilo" href="cssquery.css" rel="stylesheet" type="text/css" />
 </head>
+
 <body>
 	<header id="aba">
-		<form onsubmit='return false' method='get'> <a id='minilogo' href='mainpage.html'> 
-			<img src='waldinho.png' width=10% height=10%></a>
-			<label for='pesquisa2'> Mais alguma coisa? </label>
-			<input type='text' id='pesquisa2' required>
-			<input id='btn' type='button' onclick='query()' value='Ok'>
-		</form>
+		<main>
+			<form onsubmit='return false' method='get'> <a id='minilogo' href='mainpage.html'>
+					<img src='waldinho.png' width=10% height=10%></a>
+				<label for='pesquisa2' class="text-white"> Mais alguma coisa? </label>
+				<input type='text' id='pesquisa2' autofocus required>
+				<input id='btn' type='submit' onclick='query2()' value='Ok'>
+			</form>
+		</main>
 	</header>
-	<div id="wally">
-
+	<div class="numero_pag">
+		<p>
+			<div id="textoprépag">Número de páginas encontradas por Wally:</div>
+			<div id="páginas">258</div>
+		</p>
 	</div>
-	<div id="div1" ></div>
-<script src = "projectscript.js"></script>
+	<form onsubmit="return false;" method="get">
+		<div class="botao">
+			<input id="menos20" type="button" onclick="menosvt()" value="<-">
+			<input id="mais20" type="button" onclick="maisvt()" value="->">
+		</div>
+	</form>
+	<div id="páginaatual" class="texto">Página atual:1/258</div>
+	<div id="atual" class="texto">Pesquisa!</div>
+	<div id="wally"></div>
+
+	<div class="resultados">
+		<div id="div0">Wally não encontrou nada, mas você pode usar o wikipédia de verdade! <a
+				href='https://en.wikipedia.org/wiki/Pesquisa!'> Clique aqui</a></div>
+		<div id="div1">0Pesquisa!</div>
+		<div id="div2">1Pesquisa!</div>
+		<div id="div3">2Pesquisa!</div>
+		<div id="div4">3Pesquisa!</div>
+		<div id="div5">4Pesquisa!</div>
+		<div id="div6">5Pesquisa!</div>
+		<div id="div7">6Pesquisa!</div>
+		<div id="div8">7Pesquisa!</div>
+		<div id="div9">8Pesquisa!</div>
+		<div id="div10">9Pesquisa!</div>
+		<div id="div11">10Pesquisa!</div>
+		<div id="div12">11Pesquisa!</div>
+		<div id="div13">12Pesquisa!</div>
+		<div id="div14">13Pesquisa!</div>
+		<div id="div15">14Pesquisa!</div>
+		<div id="div16">15Pesquisa!</div>
+		<div id="div17">16Pesquisa!</div>
+		<div id="div18">17Pesquisa!</div>
+		<div id="div19">18Pesquisa!</div>
+		<div id="div20">19Pesquisa!</div>
+	</div>
+	<script src="jquery.js"></script>
+	<script src="projectscript.js"></script>
 </body>
+
 </html>
