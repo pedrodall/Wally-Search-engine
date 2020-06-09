@@ -107,8 +107,7 @@ int main(){
 
 
 
-	//função para lidar com 
-	erros (não necessário)
+//função para lidar com erros (não necessário)
 
     server.on_error = [](shared_ptr<HttpServer::Request> /*request*/, const SimpleWeb::error_code & /*ec*/) {
 		//code
