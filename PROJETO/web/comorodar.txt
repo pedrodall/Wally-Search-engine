@@ -1,0 +1,2 @@
+-No terminal aberto nessa pasta, rodar "g++ wallyserver.cpp -I/usr/include -lboost_filesystem -lboost_thread -lpthread -o wally.out"
+-Depois iniciar o servidor com "./wally.out".
