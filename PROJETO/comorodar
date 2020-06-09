@@ -1,8 +1,0 @@
-RODAR NO TERMINAL PARA INICIAL O SERVIDOR
-
--escrever com o terminal aberto na pasta que contém wallyserver.cpp:
-g++ wallyserver.cpp -I/usr/include -lboost_filesystem -lboost_thread -lpthread 
-
--e depois:
-./a.out
-
