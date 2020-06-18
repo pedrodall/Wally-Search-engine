@@ -29,7 +29,7 @@
   
   brew install openssl boost
 
-Após instalar, baixe nossa pasta no Google Drive chamada "Wallyserver" para rodar a pesquisa com o database inteiro ou baixe a pasta miniwally para rodar nossa pesquisa web com o database limitado.
+  Após instalar, baixe nossa pasta no Google Drive chamada "Wallyserver" para rodar a pesquisa com o database inteiro ou baixe a pasta miniwally para rodar nossa pesquisa web com o database limitado.
   Abra o terminal na pasta Wallyserver e rode o executável wallyserver.out ou crie um exécutável com o comando...
   
   g++ wallyserver.cpp -I/usr/include -lboost_filesystem -lboost_thread -lpthread -o wallyserver.out -o nomeexecutavel.out
