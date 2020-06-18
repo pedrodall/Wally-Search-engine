@@ -1,10 +1,16 @@
+[![N|Solid](https://cldup.com/dTxpPi9lDf.thumb.png)](https://nodesource.com/products/nsolid)
+
+[![Build Status](https://travis-ci.org/joemccann/dillinger.svg?branch=master)](https://travis-ci.org/joemccann/dillinger)
 # Wally-Search-engine
-miniwally: https://drive.google.com/drive/folders/1N7Vr1UagZ9J8Wk3JsNO4aVgH-1Qa6X8N?usp=sharing
-Wallyserver: https://drive.google.com/drive/folders/1L8QXBdYM5uX_sSt4l12jcAU_HIA2M_b6?usp=sharing
 
--Implementação Web:
 
-----Pelo Linux (no nosso caso, fizemos a implementação web em uma VirtualBox em Ubuntu 64bits): 
+
+- miniwally: https://drive.google.com/drive/folders/1N7Vr1UagZ9J8Wk3JsNO4aVgH-1Qa6X8N?usp=sharing
+- Wallyserver: https://drive.google.com/drive/folders/1L8QXBdYM5uX_sSt4l12jcAU_HIA2M_b6?usp=sharing
+
+# Implementação Web:
+
+- Pelo Linux (no nosso caso, fizemos a implementação web em uma VirtualBox em Ubuntu 64bits): 
 
   Instale a biblioteca Boost pelo terminal com o comando...
 
@@ -17,7 +23,7 @@ Wallyserver: https://drive.google.com/drive/folders/1L8QXBdYM5uX_sSt4l12jcAU_HIA
   
   Quando a desserialização acabar, abra o link "http://localhost:8080/mainpage.html" no seu navegador e se divirta.
   
-----Pelo macOS:
+- Pelo macOS:
 
   Aprendemos pelo monitor a apenas instalar tudo pelo Linux, mas o criador da Boost diz que para baixar a biblioteca pelo macOS deve-se rodar o comando...
   
