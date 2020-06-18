@@ -33,7 +33,7 @@ class Trie
     {
 		//Montamos nossa arvore com o arquivo serializado 
         //assim que a trie é criada
-		ifstream serializado ("miniTrie.txt");
+		ifstream serializado ("Trie.txt");
         clock_t t0, t;
         t0 = clock();
 		deserialize(serializado);
@@ -248,7 +248,7 @@ class Trie
             consultas.push_back(pNode->docs[i][0]);
         }
 
-        ifstream file ("titles.txt");
+        ifstream file ("titulos.txt");
 
         for(int i = 0; i < pNode->doc_size; i++)
         {
@@ -368,7 +368,7 @@ class Trie
 
             if( (*resul)[0]->size() == 0 ) { return {}; }
 
-            ifstream file ("titles.txt");
+            ifstream file ("titulos.txt");
             vector<string> titulos;
 
             for (int i = 0; i < resul->size() ; i++)
