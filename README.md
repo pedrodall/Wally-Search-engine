@@ -8,6 +8,16 @@
 - miniwally: https://drive.google.com/drive/folders/1N7Vr1UagZ9J8Wk3JsNO4aVgH-1Qa6X8N?usp=sharing
 - Wallyserver: https://drive.google.com/drive/folders/1L8QXBdYM5uX_sSt4l12jcAU_HIA2M_b6?usp=sharing
 
+
+# Versão Terminal:
+
+Baixe wally.cpp e ponta junto aos outros aquivos dentro do drive Wallyserver, após isso execute:
+
+```sh
+$ g++ -std=c++11 wally.cpp -o wally 
+$ ./wally
+```
+
 # Implementação Web:
 
 - Pelo Linux (no nosso caso, fizemos a implementação web em uma VirtualBox em Ubuntu 64bits): 
