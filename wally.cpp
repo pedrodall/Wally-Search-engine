@@ -34,7 +34,12 @@ class Trie
 		//Montamos nossa arvore com o arquivo serializado 
         //assim que a trie é criada
 		ifstream serializado ("Trie.txt");
+        clock_t t0, t;
+        t0 = clock();
 		deserialize(serializado);
+        t = clock() - t0;
+        cout << (float) t/CLOCKS_PER_SEC << endl;
+        cout << "fim da deserializacao" << endl;
 		serializado.close();
 	}
 
@@ -51,6 +56,95 @@ class Trie
                 }
             }
         }
+    }
+
+        bool check_number(string str) 
+    {
+        for (int i = 0; i < str.length(); i++)
+        {
+            if (isdigit(str[i]) == false) return false;
+        }
+            return true;
+    }
+
+    vector<string> openT(vector<string> titulos, vector<int> postitulos)
+    {
+        vector<string> texto;
+        string n;
+        bool check = false;
+
+        cout << "Resultados: "<< endl;
+        for (int i = 0; i < titulos.size(); i++)
+        {
+            cout << "["<< i << "]"<<titulos[i] << endl;
+            if(i % 20 == 19)
+            {
+                check = true;
+                cout<< "Aperte: "<< endl;
+                cout << endl;
+                cout<< "[X] Qualquer tecla para passar para a proxima pagina" << endl;
+                cout << "[X] O numero do documento para vizualizar ele" << endl;
+                cout << "[X] <quit> para uma nova pesquisa"<< endl;
+
+                cin >> n;
+                if(check_number(n)) break;
+                else if (n == "quit")
+                {
+                    return texto;
+                }
+                
+            }
+        }
+
+        if (titulos.size() == 0)
+        {
+            cout << "Nenhuma pesquisa encontrada" << endl;
+            return texto;
+        }
+
+        if (check == false)
+        {
+            cout<< "Aperte: "<< endl;
+            cout << endl;
+            cout<< "[X] Qualquer tecla para passar para a proxima pagina" << endl;
+            cout << "[X] O numero do documento para vizualizar ele" << endl;
+            cout << "[X] <quit> para uma nova pesquisa"<< endl;
+            cin >> n;
+            if(!check_number(n)) return texto;
+        }
+        
+
+        string line;
+        string a1 = "texto/txtlimpo_";
+        string a2 = to_string(postitulos[stoi(n)]/10000);
+        string a3 =".txt";
+        string result = a1+a2+a3;
+        ifstream file(result);
+        int j = postitulos[stoi(n)];
+        int i = j/10000;
+        int k = 0;
+        while (k != j - i * 10000)
+        {
+            getline(file,line);
+            if (line == "</doc>")
+            {
+                k ++;
+            }
+        
+        }
+        getline(file,line);
+        cout << line << endl;
+        texto.push_back(line);
+
+        while (line != "ENDOFARTICLE.")
+        {
+            getline(file,line);
+            cout << line << endl;
+            texto.push_back(line);
+        }
+
+        return texto;
+
     }
 
 
@@ -153,7 +247,7 @@ class Trie
             consultas.push_back(pNode->docs[i][0]);
         }
 
-        ifstream file ("titles.txt");
+        ifstream file ("titulos.txt");
 
         for(int i = 0; i < pNode->doc_size; i++)
         {
@@ -199,18 +293,23 @@ class Trie
             }    
         }
 
-        (*cons).push_back(*&(pNode->docs));
+        (*cons).push_back(pNode->docs);
         (*cons_size).push_back(pNode->doc_size);
     }
 
-    void split_search(string str)
+    vector<string> split_search(string str,  vector<int> &postextos)
     {
-        vector<vector<int>*> * cons;
-        vector<int>* cons_size, *resul;
+        clock_t t0, t;
+        vector<vector<int>*> * cons, *resul;
+        vector<int>* cons_size;
         cons = new vector<vector<int>*>;
         cons_size = new vector<int>;
+        postextos.clear();
+        string line;
+        int j = 0;
         int ini = 0;
         int f = 0;
+        t0 = clock();
 
         for (f = 0; f < str.length(); f++)
         {
@@ -224,39 +323,69 @@ class Trie
         }
 
         search(str.substr(ini,f-ini),cons,cons_size);
-        resul = new vector<int>;
 
-        if((*cons).size() > 1)
-        {
+        t = clock() - t0;
+        cout<< "Tempo de busca: ";
+        cout << (float) t/CLOCKS_PER_SEC << endl;
+
+        resul = new vector<vector<int>*>;
+
+
+        
             
             for (int i = 0; i < (*cons_size)[0] ; i++)
             {
-                resul->push_back((*((*cons)[0]+i))[0]);
-                cout << (*((*cons)[0]+i))[0] << ",";
+                resul->push_back(((*cons)[0]+i));
+                //cout << (*((*cons)[0]+i))[0] << ",";
+
 
             }
             cout << endl;
-            for (int i = 0; i < (*cons_size)[1] ; i++)
-            {
-                cout << (*((*cons)[1]+i))[0] << ",";
 
-            }
-            cout << endl;
-            for (int i = 1; i < (*cons).size() ; i++)
+            if((*cons).size() > 1)
             {
-                intersec(resul,(*cons)[i], (*cons_size)[i] );
+                // for (int i = 0; i < (*cons_size)[1] ; i++)
+                // {
+                //     cout << (*((*cons)[1]+i))[0] << ",";
+
+                // }
+                // cout << endl;
+                for (int i = 1; i < (*cons).size() ; i++)
+                {
+                    intersec(resul,(*cons)[i], (*cons_size)[i]);
+                }
+
+                t = clock() - t0;
+                cout<< "Tempo de busca booleana: ";
+                cout << (float) t/CLOCKS_PER_SEC << endl;
             }
+
+            ifstream file ("titulos.txt");
+            vector<string> titulos;
 
             for (int i = 0; i < resul->size() ; i++)
             {
-                cout << (*resul)[i] << ",";
+                //cout << (*(*resul)[i])[0] << ",";
+                while(j < (*(*resul)[i])[0])
+                {
+                    getline(file,line);
+                    j++;
+                }
+                getline(file,line);
+                titulos.push_back(line);
+                postextos.push_back(j);
+                j++;
+                
             }
+
+            return titulos;
+
             
-        }
+        
 
     }
 
-void intersec(vector<int>* resul,vector<int>* cons, int cons_size )
+void intersec(vector<vector<int>*>* resul,vector<int>* cons, int cons_size)
 {
      int k = resul->size() - 1;
 
@@ -264,13 +393,13 @@ void intersec(vector<int>* resul,vector<int>* cons, int cons_size )
     {
         if(k >= 0)
         {
-            while ((*(cons+i))[0] < (*resul)[k])
+            while ((*(cons+i))[0] < (*(*resul)[k])[0])
             {
                 (*resul).erase(resul->begin()+k);     
                 k--;
                 if(k < 0) break;
             }
-            if ((*(cons+i))[0] == (*resul)[k]) k--;
+            if ((*(cons+i))[0] == (*(*resul)[k])[0]) k--;
         }
     }
     for (int i = k; i > -1; i--)
@@ -288,18 +417,25 @@ void intersec(vector<int>* resul,vector<int>* cons, int cons_size )
 
 int main(){
 	
+    cout << "loading..."<< endl;
 	Trie trie;
-    string run = "";
-    
-    
-    while (run != "0")
+    cout << "."<< endl;
+    bool loop = true;
+    vector<int> pos;
+    while (loop == true)
     {
+        string run;
+        cout << "Search: ";
         getline(cin, run);
-        if((run != "0"))
+        if((run != "exit()"))
         {
-        trie.split_search(run);
+        vector<string> resultado = trie.split_search(run, pos);
+        trie.openT(resultado, pos);
         }
+        else loop = false;
+        cin.ignore();
     }
 
 	return 0;
+
 }
