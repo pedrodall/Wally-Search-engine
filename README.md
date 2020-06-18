@@ -1,4 +1,6 @@
 # Wally-Search-engine
+miniwally: https://drive.google.com/drive/folders/1N7Vr1UagZ9J8Wk3JsNO4aVgH-1Qa6X8N?usp=sharing
+Wallyserver: https://drive.google.com/drive/folders/1L8QXBdYM5uX_sSt4l12jcAU_HIA2M_b6?usp=sharing
 
 -Implementação Web:
 
