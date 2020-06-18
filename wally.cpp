@@ -27,6 +27,7 @@ class Trie
 {
     public: 
 
+	
     Node *pRoot = new Node;
 
     Trie() 
