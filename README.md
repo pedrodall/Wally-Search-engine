@@ -11,7 +11,7 @@
 
 # Versão Terminal:
 
-Baixe wally.cpp e ponta junto aos outros aquivos dentro do drive Wallyserver, após isso execute:
+Baixe wally.cpp e ponha junto aos outros aquivos dentro do drive Wallyserver, após isso execute:
 
 ```sh
 $ g++ -std=c++11 wally.cpp -o wally 
