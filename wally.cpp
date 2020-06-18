@@ -27,14 +27,13 @@ class Trie
 {
     public: 
 
-	
     Node *pRoot = new Node;
 
     Trie() 
     {
 		//Montamos nossa arvore com o arquivo serializado 
         //assim que a trie é criada
-		ifstream serializado ("Trie.txt");
+		ifstream serializado ("miniTrie.txt");
         clock_t t0, t;
         t0 = clock();
 		deserialize(serializado);
@@ -100,6 +99,7 @@ class Trie
         if (titulos.size() == 0)
         {
             cout << "Nenhuma pesquisa encontrada" << endl;
+            cout << "Aperte enter para continuar" << endl;
             return texto;
         }
 
@@ -248,7 +248,7 @@ class Trie
             consultas.push_back(pNode->docs[i][0]);
         }
 
-        ifstream file ("titulos.txt");
+        ifstream file ("titles.txt");
 
         for(int i = 0; i < pNode->doc_size; i++)
         {
@@ -368,7 +368,7 @@ class Trie
 
             if( (*resul)[0]->size() == 0 ) { return {}; }
 
-            ifstream file ("titulos.txt");
+            ifstream file ("titles.txt");
             vector<string> titulos;
 
             for (int i = 0; i < resul->size() ; i++)
