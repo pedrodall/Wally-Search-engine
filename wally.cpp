@@ -73,7 +73,7 @@ class Trie
         string n;
         bool check = false;
 
-        cout << "Resultados: "<< endl;
+        cout << "Numero de resultados esultados: " << titulos.size() << endl;
         for (int i = 0; i < titulos.size(); i++)
         {
             cout << "["<< i << "]"<<titulos[i] << endl;
@@ -277,7 +277,7 @@ class Trie
 
 
 
-    void search(string plvr, vector<vector<int>*> * cons, vector<int>* cons_size)
+    int search(string plvr, vector<vector<int>*> * cons, vector<int>* cons_size)
     {
         Node* pNode = pRoot;
 
@@ -289,12 +289,14 @@ class Trie
             }
             else
             {
-                return;
+                return 1;
             }    
         }
 
         (*cons).push_back(pNode->docs);
         (*cons_size).push_back(pNode->doc_size);
+
+        return 0;
     }
 
     vector<string> split_search(string str,  vector<int> &postextos)
@@ -310,19 +312,22 @@ class Trie
         int ini = 0;
         int f = 0;
         t0 = clock();
+        int z = 0;
 
         for (f = 0; f < str.length(); f++)
         {
             //cout << str[f]<< f << endl;
             if (str[f] == ' ')
             {
-                search(str.substr(ini,f-ini),cons,cons_size);
+                z += search(str.substr(ini,f-ini),cons,cons_size);
                 //cout << f;
                 ini = f+1;
             }
         }
 
-        search(str.substr(ini,f-ini),cons,cons_size);
+        z += search(str.substr(ini,f-ini),cons,cons_size);
+
+        if(z >= 1) return {};
 
         t = clock() - t0;
         cout<< "Tempo de busca: ";
@@ -359,6 +364,8 @@ class Trie
                 cout<< "Tempo de busca booleana: ";
                 cout << (float) t/CLOCKS_PER_SEC << endl;
             }
+
+            if( (*resul)[0]->size() == 0 ) { return {}; }
 
             ifstream file ("titulos.txt");
             vector<string> titulos;
