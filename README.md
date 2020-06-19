@@ -54,4 +54,5 @@ $ g++ -std=c++11 wallyserver.cpp -o wallyserver.out -I/usr/local/include
   
 # Link do Video:
 
-https://drive.google.com/file/d/1U7IRUT3wbxXCuRAGgrWiSFxP0PKg5IQC/view
+No link abaixo você encontra 3 videos, o principal e dois secundarios com rapidas demonstrações
+https://drive.google.com/folderview?id=1BbfW4xTzpagsaFKPYIjG_JL1HZAFcVar
