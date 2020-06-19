@@ -10,16 +10,6 @@
 using namespace std;
 using HttpServer = SimpleWeb::Server<SimpleWeb::HTTP>;
 
-//funções para testar como lidar com um vetor de strings como a resposta da pesquisa:
-//vector<string> lista(string a){
-//	vector<string> lista;
-//	for(int i =0;i<111;i++){
-//		int x=i;
-//		string stri= to_string(x);  
-//		lista.push_back(stri+a);
-//	}
-//	return lista;
-//}
 vector<vector<string>> vinte(vector<string> lista){
 	vector<vector<string>> c;
 	for(int i=0;i<lista.size();i++){
@@ -33,19 +23,19 @@ vector<vector<string>> vinte(vector<string> lista){
 }
 
 struct Node {
-    int doc_size;
-    vector<int>* docs; 
-    Node* pChild[128];
-    Node() {
-        for (int i = 0; i < 128; i++) {
-            pChild[i] = nullptr;
-        }
-        doc_size = 0;
-    }
-    void tamanho(int size) {
-        docs = new vector<int>[size];
-        doc_size = size;
-    }
+	int doc_size;
+	vector<int>* docs; 
+	Node* pChild[128];
+	Node() {
+		for (int i = 0; i < 128; i++) {
+			pChild[i] = nullptr;
+		}
+		doc_size = 0;
+	}
+	void tamanho(int size) {
+		docs = new vector<int>[size];
+		doc_size = size;
+	}
 };
 
 class Trie
@@ -56,17 +46,15 @@ class Trie
 
     Trie() 
     {
-        //Montamos nossa arvore com o arquivo serializado 
-        //assim que a trie é criada
-        ifstream serializado ("Trie.txt");
+		ifstream serializado ("Trie.txt");
         clock_t t0, t;
         t0 = clock();
-        deserialize(serializado);
+		deserialize(serializado);
         t = clock() - t0;
         cout << (float) t/CLOCKS_PER_SEC << endl;
         cout << "fim da deserializacao" << endl;
-        serializado.close();
-    }
+		serializado.close();
+	}
 
     void print()
     {
@@ -92,23 +80,100 @@ class Trie
             return true;
     }
 
+    vector<string> openT(vector<string> titulos, vector<int> postitulos)
+    {
+        vector<string> texto;
+        string n;
+        bool check = false;
 
-    //Nossa função de desializar vai receber o arquivo em sua forma comprimida
-    //e montara a arvore baseado nas regras de deserializaçao que foram definidas em postrie.cpp
+        cout << "Numero de resultados esultados: " << titulos.size() << endl;
+        for (int i = 0; i < titulos.size(); i++)
+        {
+            cout << "["<< i << "]"<<titulos[i] << endl;
+            if(i % 20 == 19)
+            {
+                check = true;
+                cout<< "Aperte: "<< endl;
+                cout << endl;
+                cout<< "[X] Qualquer tecla para passar para a proxima pagina" << endl;
+                cout << "[X] O numero do documento para vizualizar ele" << endl;
+                cout << "[X] <quit> para uma nova pesquisa"<< endl;
+
+                cin >> n;
+                if(check_number(n)) break;
+                else if (n == "quit")
+                {
+                    return texto;
+                }
+                
+            }
+        }
+
+        if (titulos.size() == 0)
+        {
+            cout << "Nenhuma pesquisa encontrada" << endl;
+            return texto;
+        }
+
+        if (check == false)
+        {
+            cout<< "Aperte: "<< endl;
+            cout << endl;
+            cout<< "[X] Qualquer tecla para passar para a proxima pagina" << endl;
+            cout << "[X] O numero do documento para vizualizar ele" << endl;
+            cout << "[X] <quit> para uma nova pesquisa"<< endl;
+            cin >> n;
+            if(!check_number(n)) return texto;
+        }
+        
+
+        string line;
+        string a1 = "texto/txtlimpo_";
+        string a2 = to_string(postitulos[stoi(n)]/10000);
+        string a3 =".txt";
+        string result = a1+a2+a3;
+        ifstream file(result);
+        int j = postitulos[stoi(n)];
+        int i = j/10000;
+        int k = 0;
+        while (k != j - i * 10000)
+        {
+            getline(file,line);
+            if (line == "</doc>")
+            {
+                k ++;
+            }
+        
+        }
+        getline(file,line);
+        cout << line << endl;
+        texto.push_back(line);
+
+        while (line != "ENDOFARTICLE.")
+        {
+            getline(file,line);
+            cout << line << endl;
+            texto.push_back(line);
+        }
+
+        return texto;
+
+    }
+
+
     void deserialize(ifstream& serializado) 
     {
-        Node* pNode = pRoot;
-        char letter;
-        string number = "";
-        vector<Node*> pNodes;
-        int loading = 0;
-        int i;
+		Node* pNode = pRoot;
+		char letter;
+		string number = "";
+		vector<Node*> pNodes;
+		int loading = 0;
+		int i;
         bool k = false;
-        //iteramos por cada letra do nosso arquivo e dependendo do char
-        //uma certa regra sera aplicada
-        while (serializado.get(letter)) 
+
+		while (serializado.get(letter)) 
         {
-            //cout << letter << endl;
+
             if(k == true)
             {
                 if(letter == ';')
@@ -125,41 +190,41 @@ class Trie
                 else number = number + letter;
 
             }
-            else if (letter == ',') 
+			else if (letter == ',') 
             {
-                //pNode->docs.push_back(stoi(number));
-                (*(pNode->docs + i)).push_back(stoi(number));
-                //!i++;
-                number = "";
+				//pNode->docs.push_back(stoi(number));
+				(*(pNode->docs + i)).push_back(stoi(number));
+				//!i++;
+				number = "";
                 k = true;
-            }
-            else if (letter == '.') 
+			}
+			else if (letter == '.') 
             {
-                pNodes.push_back(pNode);
-                pNode->pChild[stoi(number)] = new Node;
-                pNode = pNode->pChild[stoi(number)];
-                number = "";
-            }
-            else if (letter == '-') 
+				pNodes.push_back(pNode);
+				pNode->pChild[stoi(number)] = new Node;
+				pNode = pNode->pChild[stoi(number)];
+				number = "";
+			}
+			else if (letter == '-') 
             {
-                pNode = pNodes.back();
-                if (pNode == pRoot) 
+				pNode = pNodes.back();
+				if (pNode == pRoot) 
                 {
-                    loading++;
-                    //cout << loading << endl;  
-                }
-                pNodes.pop_back();
-                number = "";
-            }
-            else if (letter == '+') 
+					loading++;
+					//cout << loading << endl;	
+				}
+				pNodes.pop_back();
+				number = "";
+			}
+			else if (letter == '+') 
             {
-                i = 0;
-                pNode->tamanho(stoi(number));
-                number = "";
-            }
-            else number = number + letter;
-        }
-    }
+				i = 0;
+				pNode->tamanho(stoi(number));
+				number = "";
+			}
+			else number = number + letter;
+		}
+	}
 
     void search(string plvr)
     {
@@ -221,7 +286,7 @@ class Trie
 
 
 
-    void search(string plvr, vector<vector<int>*> * cons, vector<int>* cons_size)
+    int search(string plvr, vector<vector<int>*> * cons, vector<int>* cons_size)
     {
         Node* pNode = pRoot;
 
@@ -233,12 +298,14 @@ class Trie
             }
             else
             {
-                return;
+                return 1;
             }    
         }
 
         (*cons).push_back(pNode->docs);
         (*cons_size).push_back(pNode->doc_size);
+
+        return 0;
     }
 
     vector<string> split_search(string str,  vector<int> &postextos)
@@ -254,19 +321,22 @@ class Trie
         int ini = 0;
         int f = 0;
         t0 = clock();
+        int z = 0;
 
         for (f = 0; f < str.length(); f++)
         {
-            //cout << str[f]<< f << endl;
+
             if (str[f] == ' ')
             {
-                search(str.substr(ini,f-ini),cons,cons_size);
-                //cout << f;
+                z += search(str.substr(ini,f-ini),cons,cons_size);
+
                 ini = f+1;
             }
         }
 
-        search(str.substr(ini,f-ini),cons,cons_size);
+        z += search(str.substr(ini,f-ini),cons,cons_size);
+
+        if(z >= 1) return {};
 
         t = clock() - t0;
         cout<< "Tempo de busca: ";
@@ -280,7 +350,7 @@ class Trie
             for (int i = 0; i < (*cons_size)[0] ; i++)
             {
                 resul->push_back(((*cons)[0]+i));
-                //cout << (*((*cons)[0]+i))[0] << ",";
+
 
 
             }
@@ -288,12 +358,7 @@ class Trie
 
             if((*cons).size() > 1)
             {
-                // for (int i = 0; i < (*cons_size)[1] ; i++)
-                // {
-                //     cout << (*((*cons)[1]+i))[0] << ",";
 
-                // }
-                // cout << endl;
                 for (int i = 1; i < (*cons).size() ; i++)
                 {
                     intersec(resul,(*cons)[i], (*cons_size)[i]);
@@ -304,12 +369,14 @@ class Trie
                 cout << (float) t/CLOCKS_PER_SEC << endl;
             }
 
+            if( (*resul)[0]->size() == 0 ) { return {}; }
+
             ifstream file ("titulos.txt");
             vector<string> titulos;
 
             for (int i = 0; i < resul->size() ; i++)
             {
-                //cout << (*(*resul)[i])[0] << ",";
+
                 while(j < (*(*resul)[i])[0])
                 {
                     getline(file,line);
@@ -354,41 +421,28 @@ void intersec(vector<vector<int>*>* resul,vector<int>* cons, int cons_size)
 
     return;  
 }
-}
-trie;
+}trie;
+
+
 int main(){
 
 	HttpServer server;
-	server.config.port = 8080; //porta do servidor será localhost/8080
+	server.config.port = 8080; 
 
-	//função que recebe query do tipo localhost:8080/query?text={text}
+
 	server.resource["^/query$"]["GET"] = [](shared_ptr<HttpServer::Response> response, shared_ptr<HttpServer::Request> request){
-		//Trecho do código para obter a query (consulta)
+
 		auto query_fields = request->parse_query_string(); 
 
-		//Recebe o conteúdo de "entrada" (request é o pedido do user pro server)
-		auto it = query_fields.find("text"); // Obtem o texto do conteudo
-		cout << it->second << endl; //o it second é o valor q aparece em {text} la em cima
-		//A resposta para o servidor vai ser um JSON do formato
-		//{"res": "O seu projeto final vai ser incrível, [texto]!"}	
-		//JSON
-		//resultado[]=pesquisadopedro(it->second)
-		// {"atributo1":"valor1",
-		//	"atributo2": {"sub-atributo": "valor2"}} 
+		auto it = query_fields.find("text"); 
+		cout << it->second << endl; 
+
 		vector<int> pos;
     	vector<string> pesquisas = trie.split_search(it->second, pos);
 		vector<vector<string>> l= vinte(pesquisas);		
 		string vazio = "Wally não encontrou nada, mas você pode usar o wikipédia de verdade! <a href= \'https://en.wikipedia.org/wiki/"+it->second+"\'> Clique aqui</a>";	
-		//img button é só um texto q dps a gente lida no javascript pra conseguirmos interpretar
 		stringstream stream;
-		//stream << "{\"res\":\" Não conseguimos a busca para " << it->second << "..." << img_button << "\",\n"; 
-		//stream<< "{\"teste0\":\""<<pesquisas[0]<<"\",\n";
-		//for(int i=1;i<pesquisas.size();i++){
-		//    stream << "\"teste"<<i<<"\":\""<< pesquisas[i]<<"\",\n";
-		//}
-		//stream << "\"teste"<<pesquisas.size()-1<<"\":\""<<pesquisas[pesquisas.size()-1]<<"\"}";
-		
-		stream<<"{\"res\":\""<<vazio<<"\",\n";
+		stream<<"{\"res\":\""<<pesquisas.size()<<" pesquisas encontradas."<<"\",\n";
 		stream<<"\"pesquisas\":[";
 		for(int i=0;i<pesquisas.size()-1;i++){
 			stream<<"[\""<<pesquisas[i]<<"\"],";
@@ -400,26 +454,17 @@ int main(){
 		response->write(stream);
 
 	};
-	//toda essa função acima server.resource dá uma resposta pro javascript (mexe com o input de texto do user)
-	//como fazemos isso: atraves do json! (javascript object notation)
-
-
-
-	//O método default do server é abrir um arquivo na pasta web/
-	//vai receber querys do tipo localhost:8080/{text}
   	server.default_resource["GET"] = [](shared_ptr<HttpServer::Response> response, shared_ptr<HttpServer::Request> request) {
-		auto path = "./web/"+request->path; //caminho até os arquivos do tipo HTML
+		auto path = "./web/"+request->path; 
 		SimpleWeb::CaseInsensitiveMultimap header;
-		std::ifstream ifs(path, ifstream::in | ios::binary | ios::ate); //abrindo o arquivo dentro da pasta /web
-		auto length = ifs.tellg();//comprimento do arquivo
+		std::ifstream ifs(path, ifstream::in | ios::binary | ios::ate); 
+		auto length = ifs.tellg();
        	ifs.seekg(0, ios::beg);
-       	stringstream stream;   //tá pegando o conteúdo do html e passando pra uma string stream
-       	stream << ifs.rdbuf(); //salvando o conteúdo em uma stringstream
-       	//(ifs.rdbuf()) vai escrever no response a string stream
-
+       	stringstream stream;   
+       	stream << ifs.rdbuf(); 
         header.emplace("Content-Length", to_string(length));
         response->write(header);
-        response->write(stream.str().c_str(), length); //e inserindo na resposta do servidor
+        response->write(stream.str().c_str(), length); 
     };
 
 
@@ -437,7 +482,6 @@ int main(){
 //função para lidar com erros (não necessário)
 
     server.on_error = [](shared_ptr<HttpServer::Request> /*request*/, const SimpleWeb::error_code & /*ec*/) {
-		//code
 	};
 
 
