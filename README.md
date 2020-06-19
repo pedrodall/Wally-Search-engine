@@ -31,7 +31,7 @@ $ sudo apt-get install libssl-dev libboost-filesystem-dev libboost-thread-dev
   Abra o terminal na pasta Wallyserver e rode o executável wallyserver.out ou crie um exécutável com o comando...
   
 ```sh
-$ g++ wallyserver.cpp -I/usr/include -lboost_filesystem -lboost_thread -lpthread -o wallyserver.out -o wallyserver.out
+$ g++ wallyserver.cpp -I/usr/include -lboost_filesystem -lboost_thread -lpthread -o wallyserver.out 
 ```  
   Quando a desserialização acabar, abra o link "http://localhost:8080/mainpage.html" no seu navegador e se divirta.
   
