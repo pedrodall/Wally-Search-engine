@@ -53,3 +53,5 @@ $ g++ -std=c++11 wallyserver.cpp -o wallyserver.out -I/usr/local/include
   Quando a desserialização acabar, abra o link "http://localhost:8080/mainpage.html" no seu navegador e se divirta.
   
 # Link do Video:
+
+https://drive.google.com/file/d/1U7IRUT3wbxXCuRAGgrWiSFxP0PKg5IQC/view
